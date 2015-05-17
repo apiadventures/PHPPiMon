@@ -1,3 +1,3 @@
 <?php
-unlink('/tmp/motion/abc');
+echo shell_exec("sudo rm $image");
 ?>

@@ -86,16 +86,13 @@ while (TRUE)
 {
     if ($newFiles = $f->getNewFiles())
     {
-	sleep(1);
-        // Code to handle new files
-        // $newFiles is an array that contains added files
-echo "found somewthign new";
-
+    //sleep(1);
+    print("Yay, found a new file ...\n");
 	
 	foreach( $newFiles as $newFile ):
 		$output = exec("/home/pi/Dropbox-Uploader/dropbox_uploader.sh upload /tmp/motion/$newFile");
 		$path = "/tmp/motion/" . $newFile ;
-		echo "The Path is ".$path;
+		print "\nThe Path is ".$path;
 		$result = unlink('/tmp/motion/'.$newFile);
 		if ($result == 1)
 			echo "File Deleted ". $newFile;
@@ -109,7 +106,7 @@ echo "found somewthign new";
     if ($removedFiles = $f->getRemovedFiles())
     {
 		foreach( $removedFiles as $newFile ):
-			echo "  File Deleted ... " . "/tmp/motion/$newFile" . " \n";
+			print "\nFile Deleted ... " . "/tmp/motion/$newFile" . " \n";
 		endforeach;
     }
 
