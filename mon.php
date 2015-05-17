@@ -1,4 +1,7 @@
 <?php
+
+require_once('Thread.php');
+
 class FileAlterationMonitor
 {
     private $scanFolder, $initialFoundFiles;
@@ -79,37 +82,30 @@ class FileAlterationMonitor
     }
 }
 
-
 $f = new FileAlterationMonitor("/tmp/motion");
-
 while (TRUE)
 {
     if ($newFiles = $f->getNewFiles())
     {
     //sleep(1);
     print("Yay, found a new file ...\n");
-	
-	foreach( $newFiles as $newFile ):
-		$output = exec("/home/pi/Dropbox-Uploader/dropbox_uploader.sh upload /tmp/motion/$newFile");
-		$path = "/tmp/motion/" . $newFile ;
-		print "\nThe Path is ".$path;
-		$result = unlink('/tmp/motion/'.$newFile);
-		if ($result == 1)
-			echo "File Deleted ". $newFile;
-
-		sleep(1);
-	endforeach;
-
-
+    
+    foreach( $newFiles as $newFile ):
+        $output = exec("/home/pi/Dropbox-Uploader/dropbox_uploader.sh upload /tmp/motion/$newFile");
+        $path = "/tmp/motion/" . $newFile ;
+        print "\nThe Path is ".$path;
+        $result = unlink('/tmp/motion/'.$newFile);
+        if ($result == 1)
+            echo "File Deleted ". $newFile;
+        sleep(1);
+    endforeach;
     }
-
     if ($removedFiles = $f->getRemovedFiles())
     {
-		foreach( $removedFiles as $newFile ):
-			print "\nFile Deleted ... " . "/tmp/motion/$newFile" . " \n";
-		endforeach;
+        foreach( $removedFiles as $newFile ):
+            print "\nFile Deleted ... " . "/tmp/motion/$newFile" . " \n";
+        endforeach;
     }
-
     $f->updateMonitor();
 }
 ?>
