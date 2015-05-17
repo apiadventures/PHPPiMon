@@ -86,8 +86,9 @@ class FileAlterationMonitor
 function paralel( $_name, $nFile ) {
         echo 'Now running thread ' . $_name . PHP_EOL;
         //sleep(rand(3,10));
-        $output = exec("/home/pi/Dropbox-Uploader/dropbox_uploader.sh upload /tmp/motion/$nFile");
         $path = "/tmp/motion/" . $nFile ;
+        $output = exec("/home/pi/Dropbox-Uploader/dropbox_uploader.sh upload $path");
+        
         print "\nThe Path is ".$path."\n";
 
 
