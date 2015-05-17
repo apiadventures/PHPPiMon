@@ -1,7 +1,4 @@
 <?php
-
-require_once('Thread.php');
-
 class FileAlterationMonitor
 {
     private $scanFolder, $initialFoundFiles;
@@ -82,7 +79,9 @@ class FileAlterationMonitor
     }
 }
 
+
 $f = new FileAlterationMonitor("/tmp/motion");
+
 while (TRUE)
 {
     if ($newFiles = $f->getNewFiles())
@@ -97,15 +96,20 @@ while (TRUE)
         $result = unlink('/tmp/motion/'.$newFile);
         if ($result == 1)
             echo "File Deleted ". $newFile;
+
         sleep(1);
     endforeach;
+
+
     }
+
     if ($removedFiles = $f->getRemovedFiles())
     {
         foreach( $removedFiles as $newFile ):
             print "\nFile Deleted ... " . "/tmp/motion/$newFile" . " \n";
         endforeach;
     }
+
     $f->updateMonitor();
 }
 ?>
