@@ -106,15 +106,13 @@ while (TRUE)
     print("Yay, found a new file ...\n");
     // create 2 thread objects
     
-	
 	foreach( $newFiles as $newFile ):
-	
+        print($newFile."\n\n\n");
+
         $t1 = new Thread( 'paralel', $newFile );
         $t1->start( 't1' );
 
-		sleep(1);
 	endforeach;
-
 
     }
 
