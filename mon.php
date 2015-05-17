@@ -1,4 +1,7 @@
 <?php
+
+require_once('Thread.php');
+
 class FileAlterationMonitor
 {
     private $scanFolder, $initialFoundFiles;
@@ -79,6 +82,20 @@ class FileAlterationMonitor
     }
 }
 
+// function to be ran on separate threads
+function paralel( $_name, $nFile ) {
+        echo 'Now running thread ' . $_name . PHP_EOL;
+        //sleep(rand(3,10));
+        $output = exec("/home/pi/Dropbox-Uploader/dropbox_uploader.sh upload /tmp/motion/$nFile");
+        $path = "/tmp/motion/" . $nFile ;
+        print "\nThe Path is ".$path."\n";
+
+
+        $result = unlink('/tmp/motion/'.$nFile);
+        if ($result == 1)
+            echo "File Deleted ". $nFile;
+
+}
 
 $f = new FileAlterationMonitor("/tmp/motion");
 
@@ -86,16 +103,14 @@ while (TRUE)
 {
     if ($newFiles = $f->getNewFiles())
     {
-    //sleep(1);
     print("Yay, found a new file ...\n");
+    // create 2 thread objects
+    
 	
 	foreach( $newFiles as $newFile ):
-		$output = exec("/home/pi/Dropbox-Uploader/dropbox_uploader.sh upload /tmp/motion/$newFile");
-		$path = "/tmp/motion/" . $newFile ;
-		print "\nThe Path is ".$path;
-		$result = unlink('/tmp/motion/'.$newFile);
-		if ($result == 1)
-			echo "File Deleted ". $newFile;
+	
+        $t1 = new Thread( 'paralel', $newFile );
+        $t1->start( 't1' );
 
 		sleep(1);
 	endforeach;
@@ -106,7 +121,7 @@ while (TRUE)
     if ($removedFiles = $f->getRemovedFiles())
     {
 		foreach( $removedFiles as $newFile ):
-			print "\nFile Deleted ... " . "/tmp/motion/$newFile" . " \n";
+			print "\nDeleted ... " . "/tmp/motion/$newFile" . " \n";
 		endforeach;
     }
 
